@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
 async function sendHttpRequest(url, config) {
-    console.log("FETCH CONFIG:", config);
 
     const response = await fetch(url, config);
 
@@ -20,6 +19,10 @@ export default function useHttp(url, config, initialData) {
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState();
 
+    function clearData() {
+        setData(initialData)
+    }
+
     const sendRequest = useCallback(async function sendRequest(data) {
         setIsLoading(true)
         try {
@@ -35,5 +38,5 @@ export default function useHttp(url, config, initialData) {
         if (config && (config.method === "GET" || !config.method) || !config) { sendRequest() }
     }, [sendRequest, config])
 
-    return { data, isLoading, error, sendRequest }
+    return { data, isLoading, error, sendRequest, clearData }
 }
